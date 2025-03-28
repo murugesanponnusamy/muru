@@ -1,0 +1,26 @@
+root@master:~# cat externalservice.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: p1
+  name: service-apache
+spec:
+  type: ExternalName
+  externalName: ec2-13-201-15-2.ap-south-1.compute.amazonaws.com
+==================================================================
+ 1  curl p1.nasa.svc.cluster.local
+    2  exit
+    3  apt update
+    4  dpt install curl
+    5  apt install curl
+    6  curl p1cip1.nasa.svc.cluster.local
+    7  exit
+    8  curl service-apache.default.svc.cluster.local
+    9  curl service-apache
+   10  curl service-apache.ec2-13-201-15-2.ap-south-1.compute.amazonaws.com
+   19  apt install dnsutils
+   20  nslookup service-apache.svc.cluster.local
+   21  nslookup service-apache
+   22  nslookup service-apache.default.svc.cluster.local
+   23  exit

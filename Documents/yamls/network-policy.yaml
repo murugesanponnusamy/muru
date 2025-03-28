@@ -1,0 +1,150 @@
+root@master:/yamls/bosch/yamls# cat notata-to-ibm.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: notata-to-ibm
+  namespace: ibm
+spec:
+  policyTypes:
+  - Ingress
+  - Egress
+  podSelector: {}
+  ingress: []
+  egress: []
+
+root@master:/yamls/bosch/yamls# cat tata-to-ibm.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: tata-to-ibm
+  namespace: ibm
+spec:
+  policyTypes:
+  - Ingress
+  podSelector:
+    matchLabels:
+      pod: ibm1
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          ns: tata
+      podSelector:
+        matchLabels:
+          pod: tata1
+
+
+===============
+[root@master ~]# cat np2.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: audi
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+[root@master ~]# cat np3.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: audi
+spec:
+  policyTypes:
+  - Ingress
+  podSelector:
+    matchLabels:
+      pod: audi1
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          ns: bmw
+      podSelector:
+        matchLabels:
+          pod: bmw1
+[root@master ~]# cat np4.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: audi
+spec:
+  policyTypes:
+  - Ingress
+  podSelector:
+    matchLabels:
+      pod: audi1
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          ns: bmw
+    - podSelector:
+        matchLabels:
+          pod: bmw1
+
+
+-----------------------
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: audi
+spec:
+  policyTypes:
+  - Ingress
+  podSelector:
+    matchLabels:
+      pod: audi1
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          ns: tata
+    - namespaceSelector:
+        matchLabels:
+          ns: bmw
+      podSelector:
+        matchLabels:
+          pod: bmw1
+
+---------------------
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-network-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 172.17.0.0/16
+        except:
+        - 172.17.1.0/24
+    - namespaceSelector:
+        matchLabels:
+          project: myproject
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 6379
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/24
+    ports:
+    - protocol: TCP
+      port: 5978

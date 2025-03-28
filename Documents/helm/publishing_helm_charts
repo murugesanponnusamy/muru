@@ -1,0 +1,64 @@
+helm create samosa
+
+cat samosa/Chart.yaml 
+
+apiVersion: v1
+appVersion: "1.0"
+description: A Helm chart for Kubernetes
+name: samosa
+version: 0.1.0
+
+=======
+put all yaml files in template
+===========================
+then run
+
+helm template samosa
+
+This will generate all templates with variables and show the output. Now that we know everything is OK, we can deploy the chart:
+
+helm install samosa --name=samosa-name
+
+check application/services got deployed
+
+create a package:
+
+helm package samosa
+
+This command creates an archive like samosa-0.1.0.tgz — now you can share your chart with others. For instance, you can upload this file to Helm repository, which we are going to do now.
+
+====================================
+
+Create Helm repo and publish your chart
+
+1. Helm repo is an HTTP server that has file index.yaml and all your chart files. 
+2. You can use any http-server, but the easiest way to do that is to use GitHub pages.
+
+$ git clone https://github.com/kharatramesh/helmrepo.git
+$ cd vadapav-example
+$ git checkout -b helmrepo
+
+$ touch index.yaml
+$ git add index.yaml
+$ git commit -a -m "add index.yaml"
+$ git push --set-upstream origin helmrepo
+
+Now we are going to add our chart to that repo:
+$ helm package samosa
+$ mv samosa-0.1.0.tgz vadapav-example
+$ helm repo index vadapav-example/ --url http://helmrepo.prishaworld.com/
+
+cat vadapav-example/index.yaml
+
+git commit -a -m "change index"
+$ git push origin
+
+
+Now check that your server is serving index.yaml
+
+curl http://helmrepo.prishaworld.com/vadapav-example/index.yaml
+
+helm repo add vadapav-example http://helmrepo.prishaworld.com/vadapav-example
+
+helm repo list
+helm install vadapav-example/samosa --name=samosa-name

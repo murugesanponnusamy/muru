@@ -1,0 +1,30 @@
+root@vm1:~/bosch/yamls# cat rolebind-hexa.yaml
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: rb1
+  namespace: hexa
+subjects:
+- kind: Group
+  name: d40f1e1a-d482-42f1-b10d-55fcfaffbe5c
+  namespace: hexa
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: hexadev
+root@vm1:~/bosch/yamls# cat rolebind-micron.yaml
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: rb1
+  namespace: micron
+subjects:
+- kind: Group
+  name: 4c9eb25c-2065-4292-a805-71d6ab52ae1d
+  namespace: micron
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: microndev

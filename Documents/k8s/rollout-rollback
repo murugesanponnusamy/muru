@@ -1,0 +1,22 @@
+ 405  kubectl describe deployment/app1 -n bosch
+  406  clear
+  407  kubectl --record deployment/app1 set image deploy/app1 httpd=nginx -n bosch
+  408  kubectl expose deploy/app1 --type=NodePort --port=80 -n bosch
+  409  kubectl get svc -n bosch
+  410  clear
+  411  kubectl rollout history deploy/app1 -n bosch
+  412  kubectl --record deployment/app1 set image deploy/app1 httpd=kharatramesh/vadapavimages:vadapav -n bosch
+  413  kubectl rollout history deploy/app1 -n bosch
+  414  kubectl --record deployment/app1 set image deploy/app1 httpd=kharatramesh/vadapavimages:biryani -n bosch
+  415  clear
+  416  kubectl rollout history deploy/app1 -n bosch
+  417  kubectl get rs -n bosch
+  418  kubectl rollout history deploy/app1 -n bosch
+  419  kubectl rollout undo deployment/app1 --to-revision=2 -n bosch
+  420  clear
+  421  kubectl rollout history deploy/app1 -n bosch
+  422  kubectl rollout undo deployment/app1 --to-revision=3 -n bosch
+  423  history
+  424  kubectl rollout history deploy/app1 -n bosch
+  425  kubectl edit deployment/app1 -n bosch
+  426  history

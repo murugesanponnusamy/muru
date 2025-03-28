@@ -1,0 +1,626 @@
+[root@ip-172-31-40-9 ~]# history
+    1  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    2  unzip awscliv2.zip
+    3  sudo ./aws/install
+    4  aws --version
+    5  clear
+    6  aws configure
+    7  clear
+    8  us-east-2
+    9  ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_rsa
+   10  mkdir openshift
+   11  ls
+   12  cd openshift/
+   13  wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-install-linux.tar.gz
+   14  pwd
+   15  tar xvf openshift-install-linux.tar.gz
+   16  clear
+   17  ls
+   18  rm openshift-install-linux.tar.gz
+   19  ls
+   20  clear
+   21  cd
+   22  wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+   23  tar -xzf openshift-client-linux.tar.gz
+   24  pwd
+   25  cp /root/oc /usr/bin
+   26  cp /root/kubectl /usr/bin
+   27  clear
+   28  cd openshift/
+   29  oc
+   30  clear
+   31  cd
+   32  ./root/openshift-install create install-config --dir=/openshift
+   33  /root/openshift-install create install-config --dir=/openshift
+   34  cd openshift/
+   35  ./root/openshift-install create install-config --dir=/openshift
+   36  ./openshift-install create install-config --dir=/openshift
+   37  ls
+   38  vi /openshift/install-config.yaml
+   39  cp /openshift/install-config.yaml /root/openshift
+   40  clear
+   41  ls
+   42  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+   43  clear
+   44  export KUBECONFIG=/root/openshift/auth/kubeconfig
+   45  oc get route -n openshift-console
+   46  cat /root/openshift/auth/kubeadmin-password
+   47  clear
+   48  oc new-build https://github.com/k21academyuk/docker-nginx-unprivileged.git --context-dir=/mainline/alpine/
+   49  git
+   50  yum install git
+   51  git
+   52  clear
+   53  yum uninstall git
+   54  yum remove git
+   55  clear
+   56  oc new-build https://github.com/k21academyuk/docker-nginx-unprivileged.git --context-dir=/mainline/alpine/
+   57  oc get is
+   58  oc describe is docker-nginx-unprivileged
+   59  oc get istag
+   60  oc describe istag alpine:3.14
+   61  oc describe istag docker-nginx-unprivileged:latest
+   62  clear
+   63  oc get bc
+   64  oc get buildconfig docker-nginx-unprivileged -o yaml
+   65  clear
+   66  sudo -i
+   67  clear
+   68        secret: nTI1dW21U-A9t5UNbTgI
+   69  oc get pods
+   70  export KUBECONFIG=/root/openshift/auth/kubeconfig
+   71  oc get pods
+   72  clear
+   73  oc get build
+   74  export KUBECONFIG=/root/openshift/auth/kubeconfig
+   75  oc get build
+   76  oc logs -f build docker-nginx-unprivileged-1
+   77  oc logs -f build/docker-nginx-unprivileged-1
+   78  clear
+   79  oc start-build bc/docker-nginx-unprivileged
+   80  pc get pods
+   81  oc get pods
+   82  oc get pods -w
+   83  oc describe is/docker-nginx-unprivileged
+   84  export KUBECONFIG=/root/openshift/auth/kubeconfig
+   85  clear
+   86  oc get -o yaml buildconfig/docker-nginx-unprivileged
+   87  export GENERIC_SECRET=nTI1dW21U-A9t5UNbTgI
+   88  oc describe buildconfig/docker-nginx-unprivileged
+   89  clear
+   90  curl -X POST -k https://api.k21-openshift.k21openshift.tk:6443/apis/build.openshift.io/v1/namespaces/default/buildconfigs/docker-nginx-unprivileged/webhooks/$GENERIC_SECRET/generic
+   91  oc get pods
+   92  curl -X POST -k https://api.k21-openshift.k21openshift.tk:6443/apis/build.openshift.io/v1/namespaces/default/buildconfigs/docker-nginx-unprivileged/webhooks/$GENERIC_SECRET/generic
+   93  oc get pods
+   94  clear
+   95  oc set build-hook buildconfig/docker-nginx-unprivileged --post-commit --script= “echo hello from build hook”
+   96  oc set build-hook buildconfig/docker-nginx-unprivileged --post-commit --script= "echo hello from build hook"
+   97  oc set build-hook buildconfig/docker-nginx-unprivileged --post-commit --script="echo hello from build hook"
+   98  oc describe bc/docker-nginx-unprivileged
+   99  clear
+  100  oc start-build bc/docker-nginx-unprivileged
+  101  oc logs -f bc/docker-nginx-unprivileged
+  102  clear
+  103  oc set build-hook buildconfig/docker-nginx-unprivileged --post-commit --script=“exit 1”
+  104  oc set build-hook buildconfig/docker-nginx-unprivileged --post-commit --script="exit 1"
+  105  oc logs -f bc/docker-nginx-unprivileged
+  106  oc start-build bc/docker-nginx-unprivileged
+  107  oc logs -f bc/docker-nginx-unprivileged
+  108  oc set build-hook buildconfig/docker-nginx-unprivileged --post-commit --remove
+  109  oc describe bc/docker-nginx-unprivileged
+  110  cd openshift/
+  111  ./openshift-install destroy cluster --dir=/root/openshift --log-level=info
+  112  cp /openshift/install-config.yaml /root/openshift
+  113  cd openshift/
+  114  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  115  ./openshift-install destroy cluster --dir=/root/openshift --log-level=info
+  116  clear
+  117  cp /openshift/install-config.yaml /root/openshift
+  118  cd openshift/
+  119  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  120  clear
+  121  oc new-project s2i-application
+  122  export KUBECONFIG=/root/openshift/auth/kubeconfig
+  123  oc new-project s2i-application
+  124  oc new-app -h
+  125  clear
+  126  oc new-app https://github.com/k21academyuk/nodejs-ex
+  127  oc logs bc/nodejs-ex
+  128  oc get pods
+  129  clear
+  130  oc expose service/nodejs-ex
+  131  oc get route
+  132  oc logs bc/nodejs-ex
+  133  clear
+  134  oc delete all --all
+  135  clear
+  136  oc new-app nodejs~https://github.com/k21academyuk/nodejs-ex
+  137  oc logs bc/nodejs-ex
+  138  clear
+  139  oc delete all --all
+  140  oc new-app python~https://github.com/k21academyuk/nodejs-ex
+  141  oc logs bc/nodejs-ex
+  142  oc get bc/nodejs-ex
+  143  oc get build
+  144  oc get pods
+  145  ./openshift-install destroy cluster --dir=/root/openshift --log-level=info
+  146  cp /openshift/install-config.yaml /root/openshift
+  147  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  148  cd openshift/
+  149  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  150  clear
+  151  cd /etc/hosts
+  152  vi /etc/hosts
+  153  oc get nodes
+  154  export KUBECONFIG=/root/openshift/auth/kubeconfig
+  155  oc get nodes
+  156  ssh ip-10-0-153-48.us-east-2.compute.internal
+  157  ./openshift-install destroy cluster --dir=/root/openshift --log-level=info
+  158  cat /openshift/install-config.yaml
+  159  clear
+  160  cp /openshift/install-config.yaml /root/openshift
+  161  cd openshift/
+  162  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  163  export KUBECONFIG=/root/openshift/auth/kubeconfig
+  164  oc get route | grep console
+  165  ./openshift-install create destroy --dir=/root/openshift --log-level=info
+  166  ./openshift-install  destroy --dir=/root/openshift --log-level=info
+  167  ./openshift-install destroy cluster --dir=/root/openshift --log-level=info
+  168  cp /openshift/install-config.yaml /root/openshift
+  169  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  170  ./openshift-install destroy cluster --dir=/root/openshift --log-level=info
+  171  cp /openshift/install-config.yaml /root/openshift
+  172  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  173  cd openshift/
+  174  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  175  clear
+  176  export KUBECONFIG=/root/openshift/auth/kubeconfig
+  177  clear
+  178  oc create -f https://raw.githubusercontent.com/k21academyuk/openshift/main/hostpath-pv.yaml
+  179  clea
+  180  clear
+  181  oc create -f https://raw.githubusercontent.com/k21academyuk/openshift/main/hostpath-pv.yaml
+  182  oc get pv
+  183  oc create -f https://raw.githubusercontent.com/k21academyuk/openshift/main/hostpath-pvc.yaml
+  184  clear
+  185  oc get pvc
+  186  oc get pv
+  187  oc delete pv hostpath-pvc
+  188  oc delete pv hostpath-pv
+  189  oc delete pvc hostpath-pvc
+  190  clear
+  191  oc create -f https://raw.githubusercontent.com/k21academyuk/openshift/main/hostpath-pv.yaml
+  192  oc get pv
+  193  clear
+  194  oc create -f https://raw.githubusercontent.com/k21academyuk/openshift/main/hostpath-pvc.yaml
+  195  oc get pvc
+  196  oc get pv
+  197  clear
+  198  oc create -f https://raw.githubusercontent.com/k21academyuk/openshift/main/hostpath-pv-pod.yaml
+  199  oc get pods -o wide
+  200  oc describe pod hostpath-pv-pod
+  201  clear
+  202  oc get pods
+  203  oc get pv
+  204  oc get pvc
+  205  oc create -f https://raw.githubusercontent.com/k21academyuk/openshift/main/aws-storageclass-pod.yaml
+  206  oc get pvc
+  207  oc get pv
+  208  clear
+  209  oc delete -f https://raw.githubusercontent.com/k21academyuk/openshift/main/hostpath-pv-pod.yaml
+  210  oc get pods
+  211  oc get pv
+  212  oc get pvc
+  213  oc delete -f https://raw.githubusercontent.com/k21academyuk/openshift/main/hostpath-pvc.yaml
+  214  oc get pv
+  215  oc get pvc
+  216  oc delete -f https://raw.githubusercontent.com/k21academyuk/openshift/main/hostpath-pv.yaml
+  217  oc delete -f https://raw.githubusercontent.com/k21academyuk/openshift/main/aws-storageclass-pod.yaml
+  218  ./openshift-install destroy cluster --dir=/root/openshift --log-level=info
+  219  cd golb/
+  220  ls
+  221  vi .env.example
+  222  vi docker-compose.yaml
+  223  mv .env.example .env
+  224  ls
+  225  ls -a
+  226  docker-compose up
+  227  vi docker-compose.yaml
+  228  docker-compose up
+  229  clear
+  230  docker ps
+  231  curl e85263a7ab05
+  232  docker network
+  233  docker network ls
+  234  docker inspect e85263a7ab05
+  235  curl 172.18.0.3
+  236  curl 172.18.0.3:80
+  237  curl 172.18.0.3
+  238  docker-compose ps
+  239  ls
+  240  cd golb/
+  241  docker-compose ps
+  242  ifconfig
+  243  docker-compose ps -o wide
+  244  docker-compose ps -o
+  245  docker-compose ps
+  246  docker ps
+  247  docker-compose exec app composer install
+  248  docker exec -it 012821d7e90b bash
+  249  clea
+  250  rclear
+  251  clear
+  252  docker ps
+  253  docker exec -it 012821d7e90b bash
+  254  docker inspect network bridge
+  255  docker network ls
+  256  docker inspect 415ccbc2a089
+  257  cd golb/
+  258  vi docker-compose.yaml
+  259  ci Dockerfile
+  260  vi Dockerfile
+  261  docker compose down
+  262  docker-compose down
+  263  docker-compose up
+  264  docker-compose up -d
+  265  docker network ps
+  266  docker network ls
+  267  docker inspect cb19c083cc42
+  268  vi .env
+  269  clear
+  270  ls
+  271  docker inspect cb19c083cc42
+  272  docker network ls
+  273  docker inspect 7bcf303e993c
+  274  clear
+  275  ls
+  276  vi Dockerfile
+  277  vi docker-compose.yaml
+  278  clear
+  279  ls
+  280  docker ps
+  281  docker exec -it 01d697aae6de bash
+  282  docker compose down
+  283  docker-compose down
+  284  cd golb/
+  285  docker-compose down
+  286  docker ps
+  287  docker image ls
+  288  docker rm b0cd752b99ce be9281269056 80bfd1c2ffed ecac195d15af 513f9a9d8748
+  289  docker image rm b0cd752b99ce be9281269056 80bfd1c2ffed ecac195d15af 513f9a9d8748
+  290  clear
+  291  ls
+  292  cat docker-compose.yaml
+  293  vi docker-compose.yaml
+  294  vi .env
+  295  vi Dockerfile
+  296  docker-compose up -d
+  297  vi Dockerfile
+  298  docker-compose up -d
+  299  ls
+  300  docker network ls
+  301  docker isnpect 7bcf303e993c
+  302  docker inspect 7bcf303e993c
+  303  docker ps
+  304  docker exec -it f1dcbef678fd bash
+  305  docker exec -u 0 -it f1dcbef678fd bash
+  306  docker --version
+  307  clear
+  308  sudo yum update -y
+  309  sudo amazon-linux-extras install docker
+  310  sudo service docker start
+  311  docker info
+  312  docker --version
+  313  clear
+  314  git clone https://github.com/msskzx/golb.git
+  315  ls
+  316  cd golb/
+  317  ls
+  318  ls -a
+  319  vi .env.example
+  320  vi Dockerfile
+  321  vi docker-compose
+  322  mkdir docker-compose
+  323  mkdir docker-compose -f
+  324  'mkdir --help
+  325  mkdir --help
+  326  mkdir docker-compose -p
+  327  ls
+  328  mkdir conpose-file
+  329  rm conpose-file/
+  330  rm conpose-file -r
+  331  ls
+  332  mkdir compose-file
+  333  cd compose-file/
+  334  vi /docker-compose
+  335  vi ../docker-compose
+  336  sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+  337  sudo chmod +x /usr/local/bin/docker-compose
+  338  docker-compose version
+  339   sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  340  docker-compose --version
+  341  clear
+  342  cd ..
+  343  ls
+  344  mv docker-compose docker-compose.yaml
+  345  rm docker-compose
+  346  rm -r docker-compose
+  347  ls
+  348  docker-compose up
+  349   cd /openshift/
+  350  ls
+  351  cd /root/openshift/
+  352  cp /openshift/install-config.yaml /root/openshift
+  353  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  354  htpasswd
+  355  ./openshift-install destroy cluster --dir=/root/openshift --log-level=info
+  356  ckear
+  357  clear
+  358  cp /openshift/install-config.yaml /root/openshift
+  359  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  360  cd openshift/
+  361  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  362  clear
+  363  export KUBECONFIG=/root/openshift/auth/kubeconfig
+  364  yum install httpd-tools
+  365  htpasswd
+  366  clear
+  367  htpasswd
+  368  htpasswd -c -B -b ~/tmp/htpasswd admin openshiftadmin
+  369  mkdir /root/tmp/htpasswd
+  370  cd /
+  371  mkdir /root/tmp/htpasswd
+  372  cd /tmp/
+  373  pwd
+  374  mkdir /tmp/htpasswd
+  375  htpasswd -c -B -b /tmp/htpasswd admin openshiftadmin
+  376  ls
+  377  htpasswd -c -B -b /tmp/test admin openshiftadmin
+  378  rm -r -y test htpasswd
+  379  rm -r  test htpasswd
+  380  clear
+  381  cd
+  382  clear
+  383  htpasswd -c -B -b /tmp/htpasswd admin openshiftadmin
+  384  htpasswd -b /tmp/htpasswd developer openshiftdeveloper
+  385  cat /tmp/htpasswd
+  386  oc create secret generic localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
+  387  oc adm policy add-cluster-role-to-user cluster-admin admin
+  388  oc get oauth cluster
+  389  oc get oauth cluster -o yaml > /tmp/oauth.yaml
+  390  vi /tmp/oauth.yaml
+  391  oc replace -f /tmp/oauth.yaml
+  392  vi /tmp/oauth.yaml
+  393  oc replace -f /tmp/oauth.yaml
+  394  oc login -u admin -p adminopenshift
+  395  oc login -u admin -p openshiftadmin
+  396  oc get nodes
+  397  oc login -u developer -p developeropenshift
+  398  oc login -u developer -p openshiftdeveloper
+  399  oc get nodes
+  400  clear
+  401  oc login -u admin -p openshiftadmin
+  402  oc get users
+  403  oc get identity
+  404  oc extract secret/localusers -n openshift-config --to /tmp/htpasswd --confirm
+  405  oc extract secret/localusers -n openshift-config --to /tmp --confirm
+  406  htpasswd -b /tmp/htpasswd manager redhat
+  407  cat /tmp/htpasswd
+  408  oc set data secret/localusers --from-file htpasswd=/tmphtpasswd -n openshift-config
+  409  oc set data secret/localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
+  410  oc login -u manager -p redhat
+  411  clear
+  412  oc login -u admin -p openshiftadmin
+  413  oc extract secret/localusers -n openshift-config  --to /tmp --confirm
+  414  MANAGER_PASSWD="$(openssl rand -hex 15)"
+  415  htpasswd -b /tmp/htpasswd manager ${MANAGER_PASSWD}
+  416  oc set data secret/localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
+  417   oc login -u manager -p ${MANAGER_PASSWD}
+  418  oc login -u admin -p openshiftadmin
+  419  oc extract secret/localusers -n openshift-config --to /tmp --confirm
+  420  htpasswd -D /tmp/htpasswd manager
+  421  oc set data secret/localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
+  422  oc delete identity "myusers:manager"
+  423  clear
+  424  oc login -u manager -p ${MANAGER_PASSWD}
+  425  oc get users
+  426  oc delete identity "myusers:manager"
+  427  oc delete user manager
+  428  oc login -u manager -p ${MANAGER_PASSWD}
+  429  oc get users
+  430  oc extract secret/localusers -n openshift-config --to -htpasswd
+  431  oc extract secret/localusers -n openshift-config --to #htpasswd
+  432  oc extract secret/localusers -n openshift-config --to -
+  433  clear
+  434  export KUBECONFIG=/root/openshift/auth/kubeconfig
+  435  oc edit oauth
+  436  oc delete secret localusers -n openshift-config
+  437  oc delete user --all
+  438  oc delete identity --all
+  439  export KUBECONFIG=/root/openshift/auth/kubeconfig
+  440  oc delete identity --all
+  441  co get pods
+  442  oc get pods
+  443   oc edit oauth
+  444  oc get pods
+  445  export KUBECONFIG=/root/openshift/auth/kubeconfig
+  446  oc get pods
+  447  ls
+  448  cat /openshift/a
+  449  cat /openshift/
+  450  ls
+  451  cd /openshift/
+  452  ls
+  453  cd /root/openshift/auth/
+  454  ls
+  455  cat kube
+  456  cat kubeadmin-password
+  457  oc login -u kubeadmin -p dCtty-k7dyX-s7mjH-N96yj
+  458  oc delete identity --all
+  459  clear
+  460  oc get clusterrolebinding -o wide | grep -E 'NAME | self-provisioner
+  461  oc get clusterrolebinding -o wide | grep -E 'NAME | self-provisioner'
+  462  oc get clusterrolebinding -o wide | grep -E 'NAME|self-provisioner'
+  463  cd
+  464  oc describe clusterrolebindings self-provisioners
+  465  oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
+  466  oc describe clusterrolebindings self-provisioners
+  467  oc get users
+  468  oc login -u leader -p redhat
+  469  clear
+  470  htpasswd -b /tmp/htpasswd developer openshiftdeveloper
+  471  htpasswd -b /tmp/htpasswd leader redhat
+  472  oc get oauth cluster -o yaml > /tmp/oauth.yaml
+  473  vi /tmp/oauth.yaml
+  474  oc replace -f /tmp/oauth.yaml
+  475  oc create secret generic localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
+  476  oc replace -f /tmp/oauth.yaml
+  477  vi /tmp/oauth.yaml
+  478  oc replace -f /tmp/oauth.yaml
+  479  vi /tmp/oauth.yaml
+  480  oc replace -f /tmp/oauth.yaml
+  481  vi /tmp/oauth.yaml
+  482  oc replace -f /tmp/oauth.yaml
+  483   oc login -u leader -p redhat
+  484  oc new-project test
+  485  clear
+  486  oc login -u kubeadmin -p dCtty-k7dyX-s7mjH-N96yj
+  487  clear
+  488  oc policy add-role-to-user admin leader
+  489  oc adm groups new dev-group
+  490  oc adm groups add-users dev-group developer
+  491   oc adm groups new qa-group
+  492  oc adm groups add-users qa-group qa-engineer
+  493  oc get groups
+  494   oc login -u leader -p redhat
+  495  clear
+  496  oc policy add-role-to-group edit dev-group
+  497  oc policy add-role-to-group view qa-group
+  498   oc get rolebindings -o wide
+  499  oc extract secret/localusers -n openshift-config --to /tmp --confirm
+  500  oc login -u kubeadmin -p dCtty-k7dyX-s7mjH-N96yj
+  501  oc extract secret/localusers -n openshift-config --to /tmp --confirm
+  502  htpasswd -b /tmp/htpasswd developer developer
+  503  htpasswd -b /tmp/htpasswd qa-engineer qa-engineer
+  504  oc set data secret/localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
+  505  clear
+  506  oc login -u developer -p developer
+  507  oc new-app --name httpd httpd:2.4
+  508  oc policy add-role-to-user edit qa-engineer
+  509  oc login -u qa-engineer -p qa-engineer
+  510  clear
+  511  oc scale deployment httpd --replicas 3
+  512  oc login -u kubeadmin -p dCtty-k7dyX-s7mjH-N96yj
+  513  oc adm policy add-cluster-role-to-group --rolebinding-name self-provisioners self-provisioner system:authenticated:oauth
+  514  cd /root/openshift
+  515  ./openshift-install destroy cluster --dir=/root/openshift --log-level=info
+  516  clear
+  517  cp /openshift/install-config.yaml /root/openshift
+  518  cd /root/openshift
+  519  ./openshift-install create cluster --dir=/root/openshift --log-level=info
+  520  export KUBECONFIG=/root/openshift/auth/kubeconfig
+  521  clear
+  522  oc new-project authorization-secrets
+  523  oc create secret generic mysql --from-literal user=myuser --from-literal password=redhat123 --from-literal database=test_secrets --from-literal hostname=mysql
+  524  oc new-app --name mysql --docker-image registry.access.redhat.com/rhscl/mysql-57-rhel7:5.7-47
+  525  oc get pods -w
+  526  clear
+  527  oc set env deployment/mysql --from secret/mysql --prefix MYSQL_
+  528  oc set volume deployment/mysql --add --type secret --mount-path /run/secrets/mysql --secret-name mysql
+  529  oc get pods
+  530  oc rsh mysql-6bc6d47c8-tpd6t
+  531  clear
+  532  oc new-app --name quotes --docker-image quay.io/redhattraining/famous-quotes:2.1
+  533  oc get pods -l deployment=quotes -w
+  534  clear
+  535  oc set env deployment/quotes --from secret/mysql --prefix QUOTES_
+  536  oc get pods -l deployment=quotes
+  537  oc logs quotes-7ff454898f-84jzs | head -n2
+  538  oc expose service quotes
+  539  oc get route quotes
+  540  curl -s http:// quotes-authorization-secrets.apps.k21-openshift.k21openshift.tk/env | grep QUOTES_
+  541  curl -s http:// quotes-authorization-secrets.apps.k21-openshift.k21openshift.tk/status
+  542  curl -s http://quotes-authorization-secrets.apps.k21-openshift.k21openshift.tk/random
+  543  oc get deployment mysql -o yaml
+  544  oc get secrets
+  545  oc describe secret mysql
+  546  oc get secret mysql -o yaml
+  547  echo "cmVkaGF0MTIz" | -d
+  548  echo "cmVkaGF0MTIz" | base64 -D
+  549  echo "cmVkaGF0MTIz" | base64 -d
+  550  clear
+  551  oc get deployment mysql -o yaml
+  552  oc delete project authorization-secrets
+  553  clear
+  554  htpasswd -b /tmp/htpasswd developer developer
+  555  oc create secret generic localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
+  556  oc get oauth cluster -o yaml > /tmp/oauth.yaml
+  557  vi /tmp/oauth.yaml
+  558  oc replace -f /tmp/oauth.yaml
+  559  oc login -u developer -p developer
+  560  oc set data secret/localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
+  561  oc login -u developer -p developer
+  562  htpasswd -c -B -b /tmp/htpasswd developer developer
+  563  oc set data secret/localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
+  564  oc login -u developer -p developer
+  565  clear
+  566  cd
+  567  ckae
+  568  clea
+  569  clear
+  570  oc login -u developer -p developer
+  571  oc new-project authorization-scc
+  572  oc new-app --name nginx --image nginx
+  573  oc get pods
+  574  clear
+  575  oc logs nginx-7bb646cdf8-88wqha
+  576  cat /root/openshift/auth/kubeadmin-password
+  577  password=$(cat /root/openshift/auth/kubeadmin-password)
+  578  echo "password"
+  579  echo "$password"
+  580  $password
+  581  oc login -u admin -p $password
+  582  oc login -u kubeadmin -p $password
+  583  oc create sa nginx-sa
+  584  clear
+  585  oc adm policy add-scc-to-user anyuid -z nginx-sa
+  586  oc login -u developer -p developer
+  587  oc set serviceaccount deployment/nginx nginx-sa
+  588  oc get pods
+  589  oc expose service/nginx --port 80
+  590  oc get route
+  591  curl -s http://nginx-authorization-scc.apps.k21-openshift.k21openshift.tk | grep '<title>'
+  592  curl -s http://nginx-authorization-scc.apps.k21-openshift.k21openshift.tk
+  593  oc delete project authorization-scc
+  594  oc get nodes
+  595  history
+[root@ip-172-31-40-9 ~]# cat /root/openshift/auth/kubeadmin-password
+68kaF-F2nPh-IVrWA-iZRSi[root@ip-172-31-40-9 ~]# cat /tmp/oauth.yaml
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  annotations:
+    include.release.openshift.io/ibm-cloud-managed: "true"
+    include.release.openshift.io/self-managed-high-availability: "true"
+    include.release.openshift.io/single-node-developer: "true"
+    release.openshift.io/create-only: "true"
+  creationTimestamp: "2021-11-13T06:09:37Z"
+  generation: 1
+  name: cluster
+  ownerReferences:
+  - apiVersion: config.openshift.io/v1
+    kind: ClusterVersion
+    name: version
+    uid: 620d955c-b33e-4596-add2-4ef9b054ad6c
+  resourceVersion: "1706"
+  uid: 3726f52d-6421-4bd2-b481-98eda2f9b0aa
+spec:
+  identityProviders:
+  - htpasswd:
+      fileData:
+        name: localusers
+    mappingMethod: claim
+    name: myusers
+    type: HTPasswd
+
+[root@ip-172-31-40-9 ~]#

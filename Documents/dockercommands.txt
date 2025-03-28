@@ -1,0 +1,215 @@
+docker container create --name=c1 httpd
+docker search httpd --limit=5 -f is-automated=true -f is-official=true -f stars=3000
+
+sudo subscription-manager register
+sudo yum install -y yum-utils
+subscription-manager auto-attach
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+systemctl enable --now docker
+docker ps
+
+docker inspect httpd | less
+
+http://15.207.89.214:8080/
+docker network create --driver=bridge --subnet=100.100.0.0/24 bosch1
+  5  docker run -d --name=net1 --network=bosch1 --ip=100.100.0.100 --dns=8.8.8.8 --cpus="00000001" --memory=15M -p 9095:80 httpd
+    6  docker inspect net1 | grep -i ipaddr
+    7  docker inspect net1 | less
+    8  ip a s
+    9  nmcli c show
+   10  clear
+   11  ip a s
+   12  docker run -d --name=c43 httpd
+   13  ip a s
+   14  clear
+   15  nmcli c show
+   16  nmtui
+   17  nmcli --help
+   18  man nmcli
+   19  nmcli dev show
+   20  nmcli c show
+   21  nmcli dev show br-2cc4107e9cbb
+   22  docker network ls
+   23  clear
+   24  history
+ 1  clear
+    2  docker run -d --name=c9 --hostname=samosa.vadapav.com httpd
+    3  docker exec c9 hostname
+    4  docker exec c9 cat /etc/os-release
+    5  docker exec c9 ls /dev
+    6  docker exec c9 date
+    7  docker exec c9 id
+    8  history
+==============================================
+
+ docker export c9 -o c9.tar
+     7  docker import c9.tar
+    8  docker images
+   10  docker tag faa94eccd21e  myweb:v1.0
+   11  docker images
+     16  docker run -d --name=myc2 -p 9098:80 myweb:v1.0 sleep 10000
+   17  docker ps -a
+   18  docker exec -it myc2 bash
+   19  docker images
+   20  clear
+   21  history
+==========
+
+ 12  mkdir /data
+   13  getenforce
+   14  cd /data
+   15  ls
+   16  cd ..
+   17  cd ~
+   18  docker run -d --name=v1 -v /data:/var/lib/mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123 mysql
+   19  docker ps
+   20  cd /data
+   21  ls
+   22  clear
+   23  docker exec -it v1 bash
+   24  docker rm -f v1
+   25  ls
+   26  cd bosch
+   27  ls
+   28  cd ~
+   29  docker run -d --name=v2 -v /data:/var/lib/mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123 mysql
+   30  history
+=====================
+
+
+   30  history
+   31  getenforce
+   32  clear
+   33  docker volume ls
+   34  docker volume create v1
+   35  docker volume ls
+   36  docker run -d --name=v3 -v v1:/var/lib/mysql -p 3308:3306 -e MYSQL_ROOT_PASSWORD=123 mysql
+   37  docker ps
+   38  clear
+   39  cd /var/lib/docker/volumes/v1/_data/
+   40  ls
+   41  cd /var/lib/docker/volumes/
+   42  ls
+   43  # tmpfs
+   44  docker run -d --name=t1 --tmpfs /data httpd
+-----------------------------------------
+
+ 16  docker run -d --name=c1 httpd
+   17  docker run -d --name=c2 --privileged=true  httpd
+   18  docker ps
+   19  docker exec c1 ls /dev
+   20  docker exec c1 ls /dev | wc -l
+   21  docker exec c2 ls /dev
+   22  docker exec c2 ls /dev | wc -l
+   23  clear
+   24  cd ~
+   25  mkdir /data
+   26  cd /data/
+   27  touch 1.txt
+   28  ls -l 1.txt
+   29  clear
+   30  ls -l 1.txt
+   31  ls -lZ 1.txt
+   32  docker run -d --name=c3 -v /data:/data:Z httpd
+   33  history
+---------------------------------
+semanage port -a -t http_port_t -p tcp 420
+--------------------------------
+ 61  docker ps -a
+   62  docker rm -f $(docker ps -a -q)
+   63  ps fxa | grep docker -A 3
+   64  docker run -d --name=c1 httpd
+   65  clear
+   66  ps fxa | grep docker -A 6
+   67  systemctl stop httpd
+   68  ps fxa | grep docker -A 6
+   69  clear
+   70  ps fxa | grep docker -A 6
+   71  docker ps
+   72  ps fxa | grep docker -A 9
+   73  docker ps
+   74  kill -9 20590
+   75  docker ps
+   76  docker ps -a
+   77  docker start c1
+   78  ps fxa | grep docker -A 12
+---------------------------------------------
+[root@ip-172-31-15-16 dockerfiles]# cat 1.df
+FROM ubuntu
+
+LABEL "app"="prod"
+LABEL "com.example.vendor"="ACME Incorporated"
+LABEL com.example.label-with-value="foo"
+LABEL version="1.0"
+LABEL description="This text illustrates \
+that label-values can span multiple lines."
+
+MAINTAINER "trainier@bosch.com"
+
+WORKDIR /home/A
+WORKDIR B
+WORKDIR C
+
+COPY 1.txt /home
+ADD 2.txt /home/A
+ADD 1.tar.gz /home/A/B/C
+
+RUN  apt update -y
+RUN  apt install apache2 -y
+
+copy index.html /var/www/html
+
+EXPOSE 80
+
+VOLUME v1
+ENV dish=samosa
+ENV hostname=pavbhaji
+ARG dish1=vadapav
+RUN useradd s1
+ENTRYPOINT ["apache2ctl","-D","FOREGROUND"]
+----------------------------------------
+
+
+ docker build . -f 1.df -t image:v1.0 --no-cache
+=========================
+
+root@bse-docker-vdps:/dockerfiles# cat backend.df
+FROM mysql
+
+ENV MYSQL_DATABASE priar
+COPY ./createtable.sql /docker-entrypoint-initdb.d/
+COPY ./insertvalues.sql /docker-entrypoint-initdb.d/
+root@bse-docker-vdps:/dockerfiles# cat createtable.sql
+CREATE TABLE priarworld ( firstname varchar(20), rollnumber int(5));
+root@bse-docker-vdps:/dockerfiles# cat insertvalues.sql
+INSERT INTO priarworld (firstname, rollnumber) VALUES ('Pushpak',1);
+INSERT INTO priarworld (firstname, rollnumber) VALUES ('Nayan',2);
+INSERT INTO priarworld (firstname, rollnumber) VALUES ('Chait',3);
+INSERT INTO priarworld (firstname, rollnumber) VALUES ('Rutuja',4);
+INSERT INTO priarworld (firstname, rollnumber) VALUES ('Tanmay',5);
+
+
+alter user 'root'@'localhost' identified with mysql_native_password by '123';
+alter user 'root'@'%' identified with mysql_native_password by '123';
+========================
+curl -SL https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+chmod a+x /usr/local/bin/docker-compose
+cp /usr/local/bin/docker-compose /usr/bin
+ docker-compose --help
+===============
+[root@ip-172-31-15-16 dockerfiles]# cat frontend.df
+FROM ubuntu
+
+RUN apt update -y
+RUN apt install apache2 -y
+RUN DEBIAN_FRONTEND=noninteractive apt install  php -y
+CMD ["apache2ctl","-D","FOREGROUND"]
+-------------------------------
+
+ 119  docker rmi -f $(docker images -a -q)
+ docker rm -f $(docker ps -a -q)
+===================
+
+alter user 'root'@'localhost' identified with mysql_native_password by '123';
+alter user 'root'@'%' identified with mysql_native_password by '123';

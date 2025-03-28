@@ -1,0 +1,83 @@
+OKD 3.11
+
+oc login -u system:admin
+oc create user priar1
+oc get users
+oc adm policy add-cluster-role-to-user admin admin
+oc adm policy add-cluster-role-to-user admin developer
+
+--------------------------------------
+To deploy images from docker ..
+oc login -u system:admin
+
+oc new-project demo1
+oc adm policy add-scc-to-user anyuid -z default
+oc new-app --name=website4 docker.io/nginx
+
+------------------------------------------------
+To create user and assign password
+
+oc get users
+oc get identity
+
+Creating Users:
+
+
+Creating Groups:
+oc adm groups new IT
+oc adm groups new HR user1 user2
+oc adm groups add-users IT user1 user3
+oc get groups
+oc label user/user1 role=admin
+oc describe user/user1
+oc get users -o wide
+oc delete user user1
+oc get identity
+oc delete identity anypassword:priaruser1
+oc get identity
+
+To define an HTPasswd identity provider you must perform the following steps:
+1. Create an htpasswd file to store the user and password information. Instructions are provided for Linux and Windows.
+2. Create an OpenShift Container Platform secret to represent the htpasswd file.
+3. Define the HTPasswd identity provider resource.
+4. Apply the resource to the default OAuth configuration.
+
+yum install httpd-tools -y 
+htpasswd -c -B -b users.htpasswd user1 123
+htpasswd -B -b users.htpasswd user2 123
+htpasswd -B -b users.htpasswd user3 123
+cat users.htpasswd
+---------------------------------------------------------
+## Creating an HTPasswd file using Windows
+
+htpasswd.exe -c -B -b users.htpasswd user1 MyPassword!
+htpasswd.exe -b <\path\to\users.htpasswd> <user_name> <password>
+---------------------------------------------------------
+Creating the HTPasswd Secret
+Create an OpenShift Container Platform Secret that contains the HTPasswd users file.
+oc create secret generic htpass-secret --from-file=htpasswd=</path/to/users.htpasswd> -n openshift-config
+oc create secret generic htpass-secret --from-file=/root/users.htpasswd -n openshift-config
+
+
+===============================================================
+
+Examples:
+  # Check to see if I can create pods in any namespace
+  oc auth can-i create pods --all-namespaces
+
+  # Check to see if I can list deployments in my current namespace
+  oc auth can-i list deployments.extensions
+
+  # Check to see if I can do everything in my current namespace ("*" means all)
+  oc auth can-i '*' '*'
+
+  # Check to see if I can get the job named "bar" in namespace "foo"
+  oc auth can-i list jobs.batch/bar -n foo
+
+  # Check to see if I can read pod logs
+  oc auth can-i get pods --subresource=log
+
+  # Check to see if I can access the URL /logs/
+  oc auth can-i get /logs/
+-------------------------
+sonmale minal

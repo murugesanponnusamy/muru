@@ -1,0 +1,26 @@
+  139  kubectl run app1 --image=nginx
+  140  kubectl get ns
+  141  kubectl get pods
+  142  kubectl run app1 --image=nginx -n bosch
+  143  kubectl run app2 --image=nginx -n bosch
+  144  kubectl run app3 --image=nginx -n bosch
+  145  kubectl get pods -n bosch
+  146  kubectl get pods
+  147  kubectl delete pod app1
+  148  kubectl get pods
+  149  clear
+  150  kubectl get pods -n bosch
+  151  kubectl delete pod app1 -n bosch
+  152  kubectl delete pod app2 -n bosch
+  153  kubectl delete pod app3 -n bosch
+  154  kubectl create deployment app1 --image=httpd -n bosch
+  155  kubectl delete pod app1-74bf69b5dc-mw4xn -n bosch
+  156  kubectl create deployment app2 --image=httpd -n bosch --replicas=3
+  157  kubectl delete pod app2-779f94b56-hcw8b -n bosch
+  158  kubectl scale deployment/app2 --replicas=1 -n bosch
+  159  kubectl scale deployment/app2 --replicas=0 -n bosch
+  160  clear
+  161  history
+  162  kubectl scale deployment/app2 --replicas=100 -n bosch
+  163  clear
+  164  kubectl scale deployment/app2 --replicas=1 -n bosch

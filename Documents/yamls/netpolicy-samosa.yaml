@@ -1,0 +1,38 @@
+ 2123  kubectl create ns tata
+ 2124  kubectl create ns spgroup
+ 2125  kubectl lable ns spgroup org=spgroup
+ 2126  kubectl label ns spgroup org=spgroup
+
+ 2128  kubectl get ns tata --show-labels
+ 2129  kubectl get ns spgroup --show-labels
+
+
+2132  kubectl run p2 --image=httpd -l sp=pod2 -n spgroup
+ 2133  kubectl run p1 --image=httpd -l sp=pod1 -n spgroup
+ 2134  kubectl run p1 --image=httpd -l tata=pod1 -n tata
+ 2135  kubectl run p2 --image=httpd -l tata=pod2 -n tata
+
+
+[root@master ~]# cat samosa-basic.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: samosa
+spec:
+  policyTypes:
+  - Ingress
+  podSelector:
+    matchLabels:
+      d: s1
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          ns: tata
+    - podSelector:
+        matchLabels:
+          d: s2
+    - namespaceSelector:
+        matchLabels:
+          name: ibm

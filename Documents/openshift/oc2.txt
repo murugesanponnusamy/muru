@@ -1,0 +1,42 @@
+Operators usually Defines Custome Resorces that store their setting and configuration
+The Syntax of CR is defined by CRD 
+The purpose of an operator is usually to automate tasks that a human administrator (or human
+operator) would perform to deploy, update, and manage an application.
+
+=====================================================================
+The Operator Framework is an open source toolkit for building, testing, and packaging operators.
+The Operator Framework makes these tasks easier than coding directly to low-level KubernetesAPIs by providing the following components:
+
+Operator SDK
+Operator Life Cycle Manager
+
+The Operator Framework also defines a set of recommended practices for implementing
+operators and CRDs and a standard way of packaging an operator manifest, as a container image,
+that allows an operator to be distributed using an operator catalog. The most common form of an
+operator catalog is an image registry server.
+
+
+OperatorHub provides a web interface to discover and publish operators that follow the Operator
+Framework standards. Both open source operators and commercial operators can be published
+to the Operator hub. Operator container images can be hosted at different image registries, for
+example Quay.io.
+
+Cluster operatores are managed OS clustor version operator and not by OLM 
+
+OpenShift cluster operators provide OpenShift extension APIs and infrastructure services such as:
+• The OAuth server, which authenticates access to the master and extensions APIs.
+• The core DNS server, which manages service discovery inside the cluster.
+• The web console, which allows graphical management of the cluster.
+• The internal image registry, which allow developers to host container images inside the cluster,
+using either S2I or another mechanism.
+• The monitoring stack, which generates metrics and alerts about the cluster health.
+
+===============
+
+Openshift Installation Methods 
+1. Full-Stack Automation (IPI)--installer Provisioned Infrastructure 
+2. Pre-exiting Infrastructure (UPI) -- User Provision Infrastructure
+
+
+
+cloud.redhat.com/openshift/install

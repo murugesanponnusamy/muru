@@ -1,0 +1,45 @@
+root@vm1:/home/abhiram/learn/tenant# cat np1-deny-all.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: micron-denyall
+  namespace: micron
+spec:
+
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress: []
+
+
+root@vm1:/home/abhiram/learn/tenant# cat np2-allow-internet2.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-internet
+  namespace: micron   # Replace with your namespace
+spec:
+  podSelector: {}              # Selects all pods in the namespace
+  policyTypes:
+  - Egress                     # Defines egress (outgoing) traffic rules
+  - Ingress                    # Defines ingress (incoming) traffic rules
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0        # Allows outgoing traffic to all IPs (the internet)
+  ingress: []                   # Deny all incoming traffic
+root@vm1:/home/abhiram/learn/tenant# cat np-pod-to-pod-in-micron.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pod-to-pod-allow
+  namespace: micron   # Replace with your namespace
+spec:
+  podSelector: {}              # Selects all pods in the namespace
+  policyTypes:
+  - Ingress                    # Defines ingress (incoming) traffic rules
+  ingress:                    # Deny all incoming traffic
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            ns: micron

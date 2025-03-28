@@ -1,0 +1,100 @@
+root@master:/samosa# cat pvc1.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc1
+spec:
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Filesystem
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 7Gi
+      =======================
+root@master:/samosa# cat pvc2.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc2
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: azurefile-premium
+  resources:
+    requests:
+      storage: 5Gi
+
+
+      =====================
+      
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: azure-managed-disk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 2Gi
+=================================
+root@master:/samosa# cat s1.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: s1
+  name: s1
+  namespace: samosa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: s1
+  template:
+    metadata:
+      labels:
+        app: s1
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: v1
+          mountPath: /samosa
+      volumes:
+      - name: v1
+        persistentVolumeClaim:
+          claimName: pvc1
+====================================
+root@master:/samosa# cat s2.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: s1
+  name: s2
+  namespace: samosa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: s2
+  template:
+    metadata:
+      labels:
+        app: s2
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: v2
+          mountPath: /samosa
+      volumes:
+      - name: v2
+        persistentVolumeClaim:
+          claimName: pvc2

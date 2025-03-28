@@ -1,0 +1,22 @@
+oc get nodes
+oc get nodes -o wide
+oc adm top node Node_NAme
+oc describe node node_name
+oc get clusterversion
+oc get clusteroperators
+oc adm node-logs -u crio 
+oc adm node-logs -u kubelets node_name
+oc debug node/my_node_name
+chroot /host
+crictl ps
+oc rsh my-pod-name
+oc cp /local/path mypodname:/container/path
+oc port_forward mypod local_port:remote_port
+oc get pod --log-level 6
+oc get pod --log-level 10
+oc whoami -t
+
+
+
+
+

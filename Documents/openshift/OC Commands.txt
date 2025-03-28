@@ -1,0 +1,9 @@
+oc login -u developer -p developer
+oc new-project welcome --display-name="Welcome" --description="Welcome"
+oc new-app devopswithopenshift/welcome:latest --name=myapp
+oc set probe dc myapp --readiness --open-tcp=8080 --initial-delay-seconds=5 --timeout-seconds=5
+oc set probe dc myapp --liveness -- echo ok
+oc expose svc myapp --name=welcome
+oc describe dc myapp
+========================================
+

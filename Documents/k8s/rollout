@@ -1,0 +1,25 @@
+  362  kubectl --record deployment/app1 set image deployment/app1 httpd=nginx -n bosch
+  363  kubectl describe deployment/app1 -n bosch
+  364  kubectl get rs -n bosch
+  365  clear
+  366  kubectl rollout history deployment/app1 -n bosch
+  367  kubectl --record deployment/app1 set image deployment/app1 httpd=kharatramesh/vadapavimages:vadapav -n bosch
+  368  kubectl get rs -n bosch
+  369  kubectl rollout history deployment/app1 -n bosch
+  370  kubectl --record deployment/app1 set image deployment/app1 httpd=kharatramesh/vadapavimages:biryani -n bosch
+  371  kubectl rollout history deployment/app1 -n bosch
+  372  kubectl get rs -n bosch
+  373  kubectl rollout history deployment/app1 -n bosch
+  374  clear
+  375  kubectl rollout deployment/app1 undo --to-revision=2 -n bosch
+  376  kubectl rollout undo deployment/app1 --to-revision=2 -n bosch
+  377  kubectl rollout history deployment/app1 -n bosch
+  378  kubectl rollout undo deployment/app1 --to-revision=2 -n bosch
+  379  kubectl rollout undo deployment/app1 --to-revision=3 -n bosch
+  380  kubectl rollout history deployment/app1 -n bosch
+  381  kubectl edit deployment/app1 -n bosch
+  382  kubectl rollout history deployment/app1 -n bosch
+  383  kubectl edit deployment/app1 -n bosch
+  384  kubectl rollout history deployment/app1 -n bosch
+  385  kubectl edit deployment/app1 -n bosch
+  386  kubectl rollout history deployment/app1 -n bosch

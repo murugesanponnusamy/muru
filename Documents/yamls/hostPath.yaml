@@ -1,0 +1,35 @@
+root@master:/trainer# cat hostpath1.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: h1
+  name: n1
+  namespace: trainer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: h1
+  template:
+    metadata:
+      labels:
+        app: h1
+     spec:
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: n1
+        - mountPath: /learningemtptyDir
+          name: e1
+      volumes:
+      - name: n1
+        hostPath:
+          path: /samosa
+          type: DirectoryOrCreate
+      - name: e1
+        emptyDir:
+          medium: ""
+          sizeLimit: 100Mi

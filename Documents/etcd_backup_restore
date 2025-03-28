@@ -1,0 +1,38 @@
+wget https://github.com/etcd-io/etcd/releases/download/v3.3.12/etcd-v3.3.12-linux-amd64.tar.gz
+tar xvf etcd-v3.3.12-linux-amd64.tar.gz
+sudo cp etcd-v3.3.12-linux-amd64/etcd* /usr/local/bin
+sudo cp etcd-v3.3.12-linux-amd64/etcd* /usr/bin
+
+
+FOr backup:
+1.	Take a snapshot of the etcd datastore using etcdctl:
+$ sudo ETCDCTL_API=3 etcdctl snapshot save snapshot.db --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key
+sudo ETCDCTL_API=3 etcdctl snapshot status snapshot.db
+
+
+To restore 
+
+cat /etc/kubernetes/manifest/etcd.yaml
+
+  - --advertise-client-urls=https://172.31.47.212:2379
+    - --cert-file=/etc/kubernetes/pki/etcd/server.crt
+    - --client-cert-auth=true
+    - --data-dir=/var/lib/etcd
+    - --experimental-initial-corrupt-check=true
+    - --experimental-watch-progress-notify-interval=5s
+    - --initial-advertise-peer-urls=https://172.31.47.212:2380
+    - --initial-cluster=ip-172-31-47-212=https://172.31.47.212:2380
+    - --key-file=/etc/kubernetes/pki/etcd/server.key
+    - --listen-client-urls=https://127.0.0.1:2379,https://172.31.47.212:2379
+    - --listen-metrics-urls=http://127.0.0.1:2381
+    - --listen-peer-urls=https://172.31.47.212:2380
+    - --name=ip-172-31-47-212
+    - --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
+    - --peer-client-cert-auth=true
+    - --peer-key-file=/etc/kubernetes/pki/etcd/peer.key
+    - --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+    - --snapshot-count=10000
+    - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+
+
+ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key --name=master  --data-dir=/var/lib/etcd --initial-cluster=kubeadm-master=https://172.31.30.78:2380 --initial-cluster-token=etcd-cluster-1 --initial-advertise-peer-urls=https://172.31.30.78:2380

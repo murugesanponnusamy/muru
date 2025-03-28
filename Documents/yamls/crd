@@ -1,0 +1,44 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: vadapav
+spec:
+  group: vadapav1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                image:
+                  type: string
+                replicas:
+                  type: integer
+  scope: Namespaced
+  names:
+    kind: vadapav
+    plural: vadapavs
+    singular: vadapav
+    shortNames:
+    - vada
+======================================
+kubectl apply -f vada.yaml
+kubectl get crd
+kubectl describe crd
+============================
+
+Creating custom resource 
+
+
+apiVersion: vadapav1/v1
+kind: vadapav
+metadata:
+  name: vadapavtest
+spec:
+  image: nginx:latest
+  replicas: 2

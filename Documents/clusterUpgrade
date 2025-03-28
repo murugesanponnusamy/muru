@@ -1,0 +1,22 @@
+Cluster Upgradation
+
+kubelet, kubeadm, kubectl
+
+ 1. cordon worker1 , drain it gracefully 2. upgrade kubelet, kubeadm, kubectl , follow same on all worker and master nodes 3. upgrade core components of kube-system
+
+#  kubectl cordon worker1
+ #   kubectl drain worker1
+# apt-mark unhold kubelet kubeadm kubectl
+  # curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+ # echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+#apt-get update && sudo apt-get install -y kubelet kubectl kubeadm
+
+# apt-mark hold kubelet kubeadm kubectl
+
+# kubectl get nodes
+
+
+2kube-system -- api-server , etcd, controller, schedular, coredns, kube-proxy
+kubeadm upgrade plan
+kubeadm upgrade apply v1.29.3

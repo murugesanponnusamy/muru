@@ -1,0 +1,143 @@
+
+How to create namespace
+kubectl create namespace google
+    8  kubectl create namespace ibm
+    9  kubectl get namespace
+   10  kubectl get ns
+
+   11  kubectl get pods -n google
+   12  kubectl get pods -n ibm
+   13  kubectl get deployment -n ibm
+   14  kubectl get deployment -n default
+   15  kubectl get deployment
+   16  # create , run , delete , apply , describe , get , exec , log
+   17  # pods
+
+Creating pod
+
+18  kubectl run g1 --image=httpd -n google
+   19  kubectl run i1 --image=httpd -n ibm
+   20  kubectl get pods -n ibm
+   21  kubectl get pods -n google
+   22  kubectl get pods -n google -o wide
+   23  clear
+   24  kubectl get pods -n google
+   
+Describing pod
+25  kubectl describe pod g1 -n google
+   26  kubectl run p1 --image=httpd -n google
+   27  kubectl get pods -n google -o wide
+Check the logs   
+28  kubectl logs p1
+   29  kubectl logs p1 -n google
+   
+Login inside pod
+30  kubectl  exec -it p1 bash -n google
+   31  history
+=======================================
+ 8  kubectl create deployment app1 --image=httpd -n google
+    9  kubectl delete pod app1-5b79b9fd68-dnldp -n google
+   10  kubectl delete pod app1-5b79b9fd68-fs9lt -n google
+   11  kubectl create deployment vadapav --image=httpd -n google
+   12  kubectl delete pod vadapav-7d54d9c54c-465dt -n google
+   13  kubectl delete pod vadapav-7d54d9c54c-bv6pq -n google
+   14  clear
+   15  kubectl scale deployment app1 --replicas=3 -n google
+   16  kubectl delete deployment vadapav -n google
+   17  kubectl scale deployment app1 --replicas=10 -n google
+   18  kubectl scale deployment app1 --replicas=30 -n google
+   19  kubectl scale deployment app1 --replicas=1 -n google
+   20  kubectl scale deployment app1 --replicas=15 -n google
+   21  kubectl scale deployment app1 --replicas= -n google
+   22  kubectl scale deployment app1 --replicas=1 -n google
+   23  kubectl scale deployment app1 --replicas=0 -n google
+   24  kubectl scale deployment app1 --replicas=3 -n google
+==================================================
+
+Service
+  kubectl create ns google
+  kubectl create deployment app1 --image=httpd -n google
+  kubectl get pods -n google
+  kubectl expose deployment/app1 --name=app1lb1 --type=NodePort --port=80 --target-port=80 -n google
+  kubectl get svc -n google
+  kubectl expose deployment/app1 --name=app1lb1 --type=LoadBalancer --port=80 --target-port=80 -n google
+  kubectl get svc -n google
+  164  clear
+  165  kubectl create deployment app2 --image=kharatramesh/vadapavimages:vadapav -n google
+  166  kubectl expose deployment/app2 --name=app1lb2 --type=LoadBalancer --port=80 --target-port=80 -n google
+  167  kubectl get svc -n google
+  168  kubectl edit deployment app2 -n google
+  169  kubectl get pods -n google
+  170  kubectl scale deployment/app2 --replicas=5 -n google
+  171  kubectl get pods -n google
+  172  kubectl expose deployment/app2 --name=app1lb2 --type=LoadBalancer --port=80 --target-port=80 -n google --dry-run=client -o yaml
+  173  kubectl describe service app1lb2 -n google
+========================
+root@master:/yamls# cat p1.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-switch
+  namespace: ibm
+  labels:
+    env: production
+    customer: ibm
+    region: useeast1
+  annotations:
+    datacenter: useeast1
+    imageversion: dev1
+spec:
+  containers:
+  - name: c1
+    image: nginx
+    ports:
+    - containerPort: 80
+      name: webport
+      protocol: "TCP"
+===================================
+root@master:/yamls# cat app1.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vadapav
+  namespace: ibm
+  labels:
+    dev: ibm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      dish: vadapav
+  template:
+    metadata:
+      labels:
+        dish: vadapav
+    spec:
+      containers:
+      - name: c1
+        image: nginx
+====================================
+ 60  # Create yaml file using dry-run
+   61  cat p1.yaml
+   62  cat app1.yaml
+   63  clear
+   64  kubectl create deployment app2 --image=nginx -n ibm --dry-run=client -o yaml
+   65  kubectl create deployment app2 --image=nginx -n ibm --dry-run=server -o yaml
+   66  clear
+   67  kubectl create deployment app2 --image=nginx -n ibm --dry-run=client -o yaml > app1.yaml
+   68  cat app1.yaml
+   69  kubectl apply -f app1.yaml
+   70  kubectl get deploy -n ibm
+   71  kubectl delete -f app1.yaml
+   72  clear
+   73  kubectl create deployment app11 --image=httpd -n ibm --dry-run=client -o yaml
+   74  kubectl create deployment app11 --image=httpd -n ibm --dry-run=client -o yaml > app11.yaml
+   75  kubectl run p1 --image=httpd --dry-run=client -o yaml
+   76  kubectl run p1 --image=httpd --dry-run=server -o yaml
+   77  history
+   78  kubectl run p1 --image=httpd --dry-run=server -o json
+   79  kubectl run p11 --image=httpd --dry-run=client -o json
+   80  kubectl run p11 --image=httpd --dry-run=client -o json >> p11.json
+   81  kubectl apply -f p11.json
+   82  kubectl get pods
+   83  kubectl delete  -f p11.json

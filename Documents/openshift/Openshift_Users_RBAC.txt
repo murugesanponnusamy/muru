@@ -1,0 +1,340 @@
+Creating users in openshift
+Step1: login with admin user
+
+oc login -u kubeadmin
+# fetch the password from cat /root/auth/kubeadmin-password
+
+Step2:
+
+yum install httpd-tools -y 
+
+create users using htpasswd command
+
+htpasswd -c -B -b users.htpasswd user1 MyPassword!
+htpasswd  -B -b users.htpasswd user2 MyPassword!
+
+Step3:
+
+Create Secret with name called htpass-secret
+
+oc create secret generic htpass-secret --from-file=htpasswd=/vadapav/users.htpasswd -n openshift-config
+
+## oc get all -n openshift-config
+
+Step4: Creating Identity
+
+The following Custom Resource (CR) shows the parameters and acceptable values for an HTPasswd identity provider.
+
+touch i1.cr
+
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: my_htpasswd_provider 1
+    mappingMethod: claim 2 
+    type: HTPasswd
+    htpasswd:
+      fileData:
+        name: htpass-secret 3 
+-------------------
+1 This provider name is prefixed to provider user names to form an identity name.
+2 Controls how mappings are established between this provider’s identities and user objects.
+3 An existing secret containing a file generated using htpasswd.
+
+
+Step5:
+
+Adding an identity provider to your clusters
+
+oc apply -f i1.cr
+
+step6: 
+
+login 
+
+oc login -u user1
+passwd:
+---------------------------
+To Delete and Update
+
+htpasswd -D /tmp/htpasswd manager
+
+Update Secrets:
+
+oc set data secret/idli2 --from-file htpasswd=users.passwd -n openshift-config
+oc get identity -n openshift-config
+---------------------------------------
+oc extract secret/localusers -n openshift-config --to ~/DO280/labs/auth-provider/ --confirm
+---------------------------------------
+Generating Random Password
+
+MANAGER_PASSWD="$(openssl rand -hex 15)"
+--------------------------------------
+
+Assigning Administrative Privileges
+1. cluster-admin
+oc adm policy add-cluster-role-to-user cluster-admin admin
+
+------------------------------------------
+
+List all cluster role bindings that reference the self-provisioner cluster role
+oc get clusterrolebinding -o wide | grep -E 'NAME|self-provisioner'
+
+To remove clusterole (Verify Before Deleting)
+oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
+-----------------------------------------
+# Creating Groups
+oc adm groups new group1
+oc adm groups new group2
+
+# add ther user1 to  group1
+
+oc adm groups add-users group1 user1
+oc adm groups add-users group2 user2
+
+# view groups
+oc get groups
+------------------------------------------
+Add write/modify privileges group1 on project1
+# oc policy add-role-to-group edit project1
+Add REad privileges group2 on project2
+# oc policy add-role-group view project2
+------------------------------------------
+Review all role bindings on the project1 and project2
+
+oc get rolebindings -o wide
+
+-----------------------------------------------
+Configuring Application Security
+
+Managing Sensitive Information with Secrets
+
+
+
+----------------------------------------------
+Deleteing 
+
+  259  oc get secrets -n openshift-config
+  260  oc login -u idli3
+  261  oc login -u idli4
+
+  262  oc get identity -n openshift-config
+
+  263  oc delete user user1
+  264  oc delete user user2
+  265  oc delete user idli2
+  266  oc delete user vada1
+  267  oc delete user vada2
+
+  Deleting Identity provider
+
+  268  oc get identity -n openshift-config
+  269  oc delete identity provider:vada2
+  271  oc get identity -n openshift-config
+  272  oc delete identity idli:idli2
+  273  oc delete identity my_htpasswd_provider:user1
+  274  oc delete identity my_htpasswd_provider:user2
+  275  oc get identity -n openshift-config
+
+  276  oc get users -n openshift-config
+
+  277  oc get secrets -n openshift-config
+
+  Deleting secrets
+
+  278  oc delete secrets idli -n openshift-config
+  279  oc delete secrets idli1 -n openshift-config
+  280  oc delete secrets s1 -n openshift-config
+  281  oc get secrets -n openshift-config
+---------------------------------------------
+
+ 
+  298  htpasswd -bB users12.htpasswd idli5 idli5
+  299  htpasswd -bB users12.htpasswd idli6 idli6
+  300  htpasswd -bB users12.htpasswd idli7 idli7
+  301  cat users12.htpasswd
+  302  vi idli.cr
+  305   oc create secret generic idli1 --from-file=htpasswd=/vadapav/users12.htpasswd -n openshift-config
+  306  cat idli.cr
+  307  oc apply -f idli.cr
+  308  history
+
+---------------------------------------------------
+Describing OpenShift Users and Groups
+
+There are several OpenShift resources related to authentication and authorization. 
+The following is a list of the primary resource types and their definitions:
+
+1. User
+In the OpenShift Container Platform architecture, users are entities that interact with the API
+server. The user resource represents an actor within the system. Assign permissions by adding
+roles to the user directly or to the groups of which the user is a member.
+
+2. Identity
+
+The identity resource keeps a record of successful authentication attempts from a specific
+user and identity provider. Any data concerning the source of the authentication is stored on
+the identity. Only a single user resource is associated with an identity resource.
+
+3. Service Account
+
+In OpenShift, applications can communicate with the API independently when user credentials
+cannot be acquired. To preserve the integrity of a regular user's credentials, credentials are
+not shared and service accounts are used instead. Service accounts enable you to control API
+access without the need to borrow a regular user's credentials.
+
+4. Group
+
+Groups represent a specific set of users. Users are assigned to one or to multiple groups.
+Groups are leveraged when implementing authorization policies to assign permissions to
+multiple users at the same time. For example, if you want to allow twenty users access to
+objects within a project, then it is advantageous to use a group instead of granting access to
+each of the users individually. OpenShift Container Platform also provides system groups or
+virtual groups that are provisioned automatically by the cluster.
+
+5. Role
+
+A role defines a set of permissions that enables a user to perform API operations over one
+or more resource types. You grant permissions to users, groups, and service accounts by
+assigning roles to them.
+
+Openshift Roles :
+
+1. RBAC objects determine whether a user is allowed to perform a given action within a project.
+2. Cluster roles and bindings used to control who has various access levels to the OCP platform itself and all projects.
+3. Authorization is managed using:
+          1. Rules : Sets of permitted verbs on a set of objects. For example, whether a user or service account can create pods.
+          2. Roles : Collections of rules. You can associate, or bind, users and groups to multiple roles.
+          3. Bindings : Associations between users and/or groups with a role.
+4. Two levels RBAC Roles and Bindings:
+          1. CLuster RBAC: Roles and bindings that are applicable across all projects. 
+			   Cluster roles exist cluster-wide, and cluster role bindings can reference only cluster roles.
+          2. Local RBAC: Roles and bindings that are scoped to a given project.
+                         While local roles exist only in a single project, local role bindings can reference both cluster and local roles.
+5. During evaluation of request, both the cluster role bindings and the local role bindings are used. For example:
+
+	 1. Cluster-wide "allow" rules are checked.
+	 2. Locally-bound "allow" rules are checked.
+	 3. Deny by default.
+6. Default cluster roles :
+        OCP includes a set of default cluster roles that you can bind to users and groups cluster-wide or locally. 
+        You can manually modify the default cluster roles, if required.
+        
+	 1. admin : Kind of project manager, have access to project except for quota
+         2. basic-user : A user that can get basic information about projects and users.
+         3. cluster-admin : Super USer
+         4. cluster-status : A user that can get basic cluster status information.
+         5. edit : A user that can modify most objects in a project but does not have the power to view or modify roles or bindings.
+         6. self-provisioner : 	A user that can create their own projects.
+         7. view : A user who cannot make any modifications, but can see most objects in a project. They cannot view or modify roles or bindings.
+------------------------------------------------------------
+
+How authorization is evaluated ?
+
+OpenShift Container Platform evaluates authorization by using:
+
+1. Identity
+2. Action
+3. Bindings
+
+Identity
+	The user name and list of groups that the user belongs to.
+
+Action
+	The action you perform. In most cases, this consists of:
+
+	1. Project: The project you access. A project is a Kubernetes namespace with additional annotations that allows a community of users to organize and manage their content in isolation from other communities.
+	2. Verb : The action itself: get, list, create, update, delete, deletecollection, or watch.
+	3. Resource Name: The API endpoint that you access.
+
+Bindings
+
+OpenShift Container Platform evaluates authorization by using the following steps:
+
+	1. The identity and the project-scoped action is used to find all bindings that apply to the user or their groups.
+	2. Bindings are used to locate all the roles that apply.
+	3. Roles are used to find all the rules that apply.
+	4. The action is checked against each rule to find a match.
+	5. If no matching rule is found, the action is then denied by default.
+
+---------------------------------------------------------
+Each project scopes its own set of:
+
+	1. Objects: Pods, services, replication controllers, etc.
+	2. Policies: Rules for which users can or cannot perform actions on objects.
+	3. Constraints: Quotas for each kind of object that can be limited.
+	4. Service accounts: Service accounts act automatically with designated access to objects in the project.
+---------------------------------------------------------------
+
+Viewing cluster roles and bindings:
+       1. To view the cluster roles and their associated rule sets: 
+          # oc describe clusterrole.rbac
+       2. To view the current set of cluster role bindings, which shows the users and groups that are bound to various roles:
+	  # oc describe clusterrolebinding.rbac
+-----------------------------------------------------------------
+Viewing local roles and bindings:
+      1. To view the current set of local role bindings, which show the users and groups that are bound to various roles for the current project
+         # oc describe rolebinding.rbac
+      2. To view the local role bindings for a different project, add the -n flag to the command:
+         # oc describe rolebinding.rbac -n joe-project
+-----------------------------------------------------------------
+
+Adding roles to users:
+ 
+oc adm command is used to manage role and bindings
+
+1. Add a role to a user in a specific project:
+    # oc adm policy add-role-to-user <role> <user> -n <project>
+    # For example, you can add the admin role to the alice user in joe project by running:
+      oc adm policy add-role-to-user admin alice -n joe
+2. to view attached role and rolebinding to project
+    # oc describe rolebinding.rbac -n <project> 
+    # For example, to view the local role bindings for the joe project:
+------------------------------------------------------------------
+Creating a local role
+1. You can create a local role for a project and then bind it to a user.
+   # oc create role <name> --verb=<verb> --resource=<resource> -n <project>
+   e.g # oc create role podview --verb=get --resource=pod -n blue
+2. To bind the new role to a user, run the following command:
+   # oc adm policy add-role-to-user podview user2 --role-namespace=blue -n blue
+----------------------------------------------------------------------
+Creating a cluster role
+1. To create a cluster role, run the following command:
+   # oc create clusterrole <name> --verb=<verb> --resource=<resource>
+   e.g # oc create clusterrole podviewonly --verb=get --resource=pod
+-----------------------------------------------------------------------
+
+Local role binding commands
+
+$ oc adm policy who-can <verb> <resource> : Indicates which users can perform an action on a resource.
+$ oc adm policy add-role-to-user <role> <username> : Binds a specified role to specified users in the current project.
+$ oc adm policy remove-role-from-user <role> <username> : Removes a given role from specified users in the current project.
+$ oc adm policy remove-user <username> : Removes specified users and all of their roles in the current project.
+$ oc adm policy add-role-to-group <role> <groupname> : Binds a given role to specified groups in the current project.
+$ oc adm policy remove-role-from-group <role> <groupname> : Removes a given role from specified groups in the current project.
+$ oc adm policy remove-group <groupname> : Removes specified groups and all of their roles in the current project.
+-------------------------------------------------------------------------
+Cluster role binding commands
+
+$ oc adm policy add-cluster-role-to-user <role> <username> : Binds a given role to specified users for all projects in the cluster.
+$ oc adm policy remove-cluster-role-from-user <role> <username> : Removes a given role from specified users for all projects in the cluster.
+$ oc adm policy add-cluster-role-to-group <role> <groupname> : Binds a given role to specified groups for all projects in the cluster.
+$ oc adm policy remove-cluster-role-from-group <role> <groupname> : Removes a given role from specified groups for all projects in the cluster.
+----------------------------------------------------------------------
+Creating a cluster admin
+
+# oc adm policy add-cluster-role-to-user cluster-admin <user>
+----------------------------------------------------------------------
+Removing the kubeadmin user
+
+Prerequisites
+You must have configured at least one identity provider.
+You must have added the cluster-admin role to a user.
+You must be logged in as an administrator.
+
+oc delete secrets kubeadmin -n kube-system  
+(If you follow this procedure before another user is a cluster-admin, then OpenShift Container Platform must be reinstalled. It is not possible to undo this command)
+------------------------------------------------------------------------

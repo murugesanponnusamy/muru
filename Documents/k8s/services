@@ -1,0 +1,12 @@
+ 183  kubectl create deployment app1 --image=httpd -n trainer
+  184  kubectl get service -n trainer
+  185  kubectl expose deployment/app1 --name=app1s1 --type=NodePort --port=80 --target-port=80 -n trainer
+  186  kubectl get svc -n trainer
+  187  kubectl expose deployment/app1 --name=app1lb1 --type=LoadBalancer --port=80 --target-port=80 -n trainer
+  188  kubectl get svc -n trainer
+  189  kubectl expose deployment/app1 --name=app1lb2 --type=LoadBalancer --external-ip=98.89.86.67 --port=80 --target-port=80 -n trainer
+  190  kubectl get svc -n trainer
+  191  clear
+  192  kubectl expose deployment/app1 --name=dbs1 --type=ClusterIP --port=80 --target-port=80 -n trainer
+  193  kubectl get svc -n trainer
+  194  history

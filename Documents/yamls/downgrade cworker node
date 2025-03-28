@@ -1,0 +1,23 @@
+kubectl cordon worker1
+kubectl drain worker1 --ignore-daemonsets --delete-emptydir-data --force
+
+On worker node
+
+kubeadm reset
+apt-get purge kubeadm kubectl kubelet kubernetes-cni kube*
+ sudo apt-get autoremove
+sudo rm -rf ~/.kube
+-------------
+ 30  sudo apt-get install -y apt-transport-https ca-certificates curl
+   31  curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+   32  echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+   33  sudo apt-get update
+   34  apt-mark unhold kubelet kubeadm kubectl
+   35  apt-get install -y kubelet kubeadm kubectl
+apt-mark hold kubelet kubeadm kubectl
+
+====================
+To join worker node
+
+ 2076  kubeadm token generate
+ 2077  kubeadm token create mny1o0.x3e4ivdiwv68cju5 --print-join-command

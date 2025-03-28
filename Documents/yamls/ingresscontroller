@@ -1,0 +1,119 @@
+Follow link for installtion
+https://kubernetes.github.io/ingress-nginx/deploy/
+
+If you have Helm, you can deploy the ingress controller with the following command:
+
+
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+
+  ---------------------------------------------
+  If you want a full list of values that you can set, while installing with Helm, then run:
+
+helm show values ingress-nginx --repo https://kubernetes.github.io/ingress-nginx
+
+===============
+
+If you don't have Helm or if you prefer to use a YAML manifest, you can run the following command instead:
+
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
+
+----------------======================
+
+Examples 
+
+kubectl run pod1 --image=httpd
+kubectl run pod2 --image=nginx
+kubectl expose pod/pod1 --type=ClusterIP --port=80
+kubectl expose pod/pod2 --type=ClusterIP --port=80
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
+-------------------------------------
+vi ingressrules.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app1
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: first.priartw.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: pod1
+            port:
+              number: 80
+  - host: second.priartw.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: pod2
+            port:
+              number: 80
+  - host: biryani.prishaworld.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: app2s1
+            port:
+              number: 80
+   
+              ------------------------------
+
+kubectl apply -f ingressrules.yaml
+ kubectl get ingress
+  567  curl first.priartw.com
+  570  curl second.priartw.com
+
+Second example -- simple fanout=====================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-fanout-example
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: first.priartw.com
+    http:
+      paths:
+      - path: /tea
+        pathType: Prefix
+        backend:
+          service:
+            name: s1
+            port:
+              number: 80
+      - path: /cofee
+        pathType: Prefix
+        backend:
+          service:
+            name: s2
+            port:
+              number: 80
+
+==============================================
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: default-http-backend
+spec:
+  defaultBackend:
+    service:
+      name: s1
+      port:
+        number: 80
+=============================================

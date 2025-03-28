@@ -1,0 +1,10 @@
+kubectl create deployment app1 --image=httpd -n trainer
+ kubectl expose deployment/app1 --name=apps1 --type=NodePort --port=80 --target-port=80 -n trainer
+kubectl --record deployment/app1 set image deployment/app1 httpd=nginx -n trainer
+kubectl rollout history deploy/app1 -n trainer
+
+ kubectl --record deployment/app1 set image deployment/app1 httpd=kharatramesh/vadapavimages:biryani -n trainer
+
+ kubectl rollout history deploy/app1 -n trainer
+
+kubectl rollout undo deployment/app1 --to-revision=5 -n trainer

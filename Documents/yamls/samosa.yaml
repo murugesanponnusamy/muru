@@ -1,0 +1,28 @@
+[root@master yamls]# cat samosa.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secretsamosa
+  labels:
+    dish: samosa
+  annotations:
+    region: us-east-1
+spec:
+  containers:
+  - name: c1
+    image: mysql
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: s1
+          key: password
+    - name: MYSQL_DATABASE
+      valueFrom:
+        secretKeyRef:
+          name: s1
+          key: database
+
+   # envFrom:
+    #- secretRef:
+     #   name: secret1

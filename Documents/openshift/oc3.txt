@@ -1,0 +1,22 @@
+Authorization Process 
+Rule
+Role
+Binding : Assigning of users  
+===========================
+RBAC Scope
+
+Cluster Role
+Local Role
+========================
+oc adm policy 
+oc adm policy add-role-to-user view user1
+oc adm policy add-role-to-user admin ramesh -n project1
+oc adm policy who-can delete user1
+ROles :
+admin
+basic-user
+cluster-admin
+cluster-status
+edit
+self-provisioner
+

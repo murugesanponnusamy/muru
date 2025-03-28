@@ -1,0 +1,55 @@
+root@ip-172-31-9-85:~# cat storageclass1.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: efs-sc
+provisioner: efs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
+=======================================
+root@ip-172-31-9-85:~# cat storageclass2.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-sc-retain
+provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+root@ip-172-31-9-85:~#
+========================================
+
+root@ip-172-31-9-85:~# cat pvc1.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc1
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: ebs-sc-retain
+  resources:
+    requests:
+      storage: 5Gi
+=========================================
+
+root@ip-172-31-9-85:~# cat pod1.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: p1
+  name: p2
+spec:
+  containers:
+  - image: mysql
+    name: p2
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "123"
+    volumeMounts:
+      - name: v1
+        mountPath: /var/lib/mysql
+  volumes:
+    - name: v1
+      persistentVolumeClaim:
+        claimName: pvc1

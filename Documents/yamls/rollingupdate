@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: d1
+  namespace: trainer
+  labels:
+    env: prd
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      dish: samosa
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        dish: samosa
+    spec:
+      containers:
+      - name: c1
+        image: kharatramesh/vadapavimages:pavbhaji

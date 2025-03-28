@@ -1,0 +1,20 @@
+az aks update --resource-group myResourceGroup --name myAKSCluster --enable-keda
+kubectl get pods -n kube-system 
+
+
+git clone https://github.com/karthikeyanVK/mongo-keda-scaler.git
+kubectl apply -f deployment/
+kubectl apply -f keda/mongo-hpa.yaml
+
+To scale up we have to insert some values to Mongo database. To do this we can use the helper app:
+
+kubectl exec $(kubectl get pods | grep "server" | cut -f 1 -d " ") -- keda-talk mongo insert
+
+kubectl get pods
+
+kubectl exec $(kubectl get pods | grep "server" | cut -f 1 -d " ") -- keda-talk mongo delete
+
+to debug :
+
+kubectl logs -n keda -l app=keda-operator
+

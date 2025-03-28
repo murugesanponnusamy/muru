@@ -1,0 +1,47 @@
+  kubectl create deployment spgroup --image=httpd -n trainer --dry-run=client -o yaml > spgroup.yaml
+=======
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: spgroup
+  name: spgroup
+  namespace: trainer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spgroup
+  template:
+    metadata:
+      labels:
+        app: spgroup
+    spec:
+      containers:
+      - image: httpd
+        name: httpd
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+          limits:
+            cpu: 20m
+            memory: 20Mi
+
+
+=====
+
+
+
+ kubectl autoscale deployment/spgroup --cpu-percent=30 --min=2 --max=10 -n trainer
+
+kubectl get hpa -n trainer
+
+kubectl exec -it spgroup-ccf9b8fd7-hpq7w bash -n trainer
+
+Please run below command Inside pod 
+dd if=/dev/zero of=/dev/null
+
+
+ 

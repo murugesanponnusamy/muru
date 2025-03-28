@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-internet
+  namespace: micron   # Replace with your namespace
+spec:
+  podSelector: {}              # Selects all pods in the namespace
+  policyTypes:
+  - Egress                     # Defines egress (outgoing) traffic rules
+  - Ingress                    # Defines ingress (incoming) traffic rules
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0        # Allows outgoing traffic to all IPs (the internet)
+  ingress: []                   # Deny all incoming traffic
+~
