@@ -1,17 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: my-k8s-app
+  name: muru-app
   namespace: murugesan
 spec:
   destination:
-    namespace: default
     server: https://kubernetes.default.svc
-  source:
-    path: dev
-    targetRevision: main
+    namespace: default
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-
