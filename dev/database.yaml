@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  labels:
+    app: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: postgres
+        image: murugesanponnusamy/muru:postgresql1.0
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          value: "password"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+spec:
+  selector:
+    app: database
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
