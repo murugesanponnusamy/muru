@@ -1,12 +1,12 @@
 kind: Pod
 apiVersion: v1
 metadata:
-  name: apple-app
+  name: apple-app-db
   labels:
     app: apple
 spec:
   containers:
-    - name: apple-app
+    - name: apple-app-db
       image: hashicorp/http-echo
       args:
         - "-text=apple"
