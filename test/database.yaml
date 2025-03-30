@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: murugesanponnusamy/muru:postgresql1.0
+        image: kharatramesh/vadapav:vadapav
         ports:
         - containerPort: 5432
         env:
