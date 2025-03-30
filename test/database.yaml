@@ -1,36 +1,24 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: database
-  labels:
-    app: database
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: database
-  template:
-    metadata:
-      labels:
-        app: database
-    spec:
-      containers:
-      - name: postgres
-        image: kharatramesh/vadapav:vadapav
-        ports:
-        - containerPort: 5432
-        env:
-        - name: POSTGRES_PASSWORD
-          value: "123"
----
+kind: Pod
 apiVersion: v1
-kind: Service
 metadata:
-  name: database-service
+  name: apple-app
+  labels:
+    app: apple
+spec:
+  containers:
+    - name: apple-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=apple"
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: apple-service
 spec:
   selector:
-    app: database
+    app: apple
   ports:
-    - protocol: TCP
-      port: 5432
-      targetPort: 5432
+    - port: 5678 # Default port for image
