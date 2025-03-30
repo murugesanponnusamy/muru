@@ -1,34 +1,24 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: web-server
-  labels:
-    app: web-server
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: web-server
-  template:
-    metadata:
-      labels:
-        app: web-server
-    spec:
-      containers:
-      - name: nginx
-        image: murugesanponnusamy/muru:alpine1.0
-        ports:
-        - containerPort: 80
----
+kind: Pod
 apiVersion: v1
-kind: Service
 metadata:
-  name: web-server-service
+  name: apple-app
+  labels:
+    app: apple
 spec:
-  type: LoadBalancer
+  containers:
+    - name: apple-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=apple"
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: apple-service
+spec:
   selector:
-    app: web-server
+    app: apple
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
+    - port: 5678 # Default port for image
