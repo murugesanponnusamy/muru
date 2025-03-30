@@ -16,7 +16,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: apple-service
+  name: db-service
 spec:
   selector:
     app: apple
