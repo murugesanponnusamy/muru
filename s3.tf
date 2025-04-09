@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "b01" {
-    bucket = "muru10prod-123456789"
+    bucket = "muru100prod-123456789"
 }
 
 resource "aws_s3_bucket" "b2" {
