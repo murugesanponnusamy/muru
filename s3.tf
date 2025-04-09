@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "b1" {
+resource "aws_s3_bucket" "b01" {
     bucket = "muru10prod-123456789"
 }
 
