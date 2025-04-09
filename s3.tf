@@ -9,6 +9,6 @@ resource "aws_s3_bucket" "b2" {
 resource "aws_s3_bucket" "b3" {
     bucket = "muru30-123456789"
 }
-resource "aws_s3_bucket" "b4" {
-    bucket = "muru40-123456789"
+resource "aws_s3_bucket" "b5" {
+    bucket = "muru50-123456789"
 }
